@@ -3,22 +3,26 @@ import { Platform } from 'react-native';
 import { Alarm } from '../types/alarm';
 import { fetchSunrise, computeAlarmTime } from './sunriseService';
 import { getCurrentLocation } from './locationService';
-import { getRingtoneById } from './ringtoneService';
+import { getRingtoneById, RINGTONES } from './ringtoneService';
 
 // ─── Notification channel setup ─────────────────────────────────────────────
 
 export async function setupNotifications() {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('alarm', {
-      name: 'Alarms',
-      description: 'Sunrise offset alarm notifications',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 500, 250, 500, 250, 500],
-      lightColor: '#F5A623',
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
-      sound: 'default',
-      bypassDnd: true,
-    });
+    // Android requires a separate channel for each custom sound
+    for (const ringtone of RINGTONES) {
+      const channelId = `alarm-${ringtone.id}`;
+      await Notifications.setNotificationChannelAsync(channelId, {
+        name: `Alarm Sound: ${ringtone.label}`,
+        description: `Sunrise offset alarm with ${ringtone.label} sound`,
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 500, 250, 500, 250, 500], // Could also be mapped dynamically
+        lightColor: '#F5A623',
+        lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+        sound: ringtone.notificationSound,
+        bypassDnd: true,
+      });
+    }
   }
 
   await Notifications.setNotificationHandler({
@@ -89,7 +93,7 @@ export async function scheduleAlarm(alarm: Alarm): Promise<string[]> {
           body: `${offsetLabel} — ${timeLabel}`,
           sound: ringtone.notificationSound,
           data: { alarmId: alarm.id },
-          ...(Platform.OS === 'android' && { channelId: 'alarm' }),
+          ...(Platform.OS === 'android' && { channelId: `alarm-${ringtone.id}` }),
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,

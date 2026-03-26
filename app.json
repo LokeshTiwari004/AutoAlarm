@@ -41,6 +41,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./withCustomRingtones.js",
       "expo-font",
       [
         "expo-notifications",

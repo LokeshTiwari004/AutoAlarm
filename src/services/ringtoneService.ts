@@ -10,12 +10,13 @@ export interface Ringtone {
 }
 
 export const RINGTONES: Ringtone[] = [
-  { id: 'default',  label: 'Default',       emoji: '🔔', notificationSound: 'default', hasPreview: true  },
-  { id: 'gentle',   label: 'Gentle',        emoji: '🎵', notificationSound: 'default', hasPreview: true  },
-  { id: 'sunrise',  label: 'Sunrise',       emoji: '🌅', notificationSound: 'default', hasPreview: true  },
-  { id: 'bell',     label: 'Bell',          emoji: '🛎️', notificationSound: 'default', hasPreview: true  },
-  { id: 'digital',  label: 'Digital',       emoji: '📟', notificationSound: 'default', hasPreview: true  },
-  { id: 'vibrate',  label: 'Vibrate only',  emoji: '📳', notificationSound: 'default', hasPreview: true  },
+  { id: 'default',  label: 'System Default', emoji: '🔔', notificationSound: 'default', hasPreview: false },
+  { id: 'bell',     label: 'Simple Bell',    emoji: '🛎️', notificationSound: 'bell.wav',  hasPreview: false },
+  { id: 'digital',  label: 'Digital Beep',   emoji: '📟', notificationSound: 'digital.wav', hasPreview: false },
+  { id: 'harp',     label: 'Harp Arpeggio',  emoji: '🎶', notificationSound: 'harp.wav', hasPreview: false },
+  { id: 'siren',    label: 'Wake Up Siren',  emoji: '🚨', notificationSound: 'siren.wav', hasPreview: false },
+  { id: 'birds',    label: 'Bird Chirps',    emoji: '🐦', notificationSound: 'birds.wav', hasPreview: false },
+  { id: 'pulse',    label: 'Deep Pulse',     emoji: '📳', notificationSound: 'pulse.wav', hasPreview: false },
 ];
 
 export function getRingtoneById(id: string): Ringtone {
